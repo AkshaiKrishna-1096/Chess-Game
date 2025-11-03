@@ -27,9 +27,7 @@ Position& Position::operator=(const Position& other) {
 }
 
 // Destructor
-Position::~Position() {
-    // Nothing to clean up for primitive types
-}
+Position::~Position() {}
 
 // Getters
 int Position::getRow() const {
@@ -54,12 +52,11 @@ void Position::setPosition(int r, int c) {
     col = c;
 }
 
-// Validation - instance method
+// Validation
 bool Position::isValid() const {
     return isValid(row, col);
 }
 
-// Validation - static method
 bool Position::isValid(int row, int col) {
     return row >= 0 && row < 8 && col >= 0 && col < 8;
 }
@@ -74,12 +71,11 @@ bool Position::operator!=(const Position& other) const {
     return !(*this == other);
 }
 
-// Equals method (alternative to operator)
-bool Position::equals(const Position& other) const {
-    return *this == other;
-}
-
-// Convert to algebraic notation string
+/**
+ * @brief Output the Col and Row into Rank and File format
+ * 
+ * @return std::string 
+ */
 std::string Position::toString() const {
     if (!isValid()) {
         return "Invalid";
@@ -94,7 +90,12 @@ std::string Position::toString() const {
     return result;
 }
 
-// Create position from algebraic notation (e.g., "e4")
+/**
+ * @brief Convert rank and file into Col and Row
+ * 
+ * @param notation 
+ * @return Position 
+ */
 Position Position::fromString(const std::string& notation) {
     if (notation.length() != 2) {
         return Position(-1, -1);  // Invalid position
@@ -113,31 +114,37 @@ Position Position::fromString(const std::string& notation) {
     return Position(row, col);
 }
 
-// Calculate Euclidean distance
-int Position::distanceTo(const Position& other) const {
-    int dr = row - other.row;
-    int dc = col - other.col;
-    return static_cast<int>(std::sqrt(dr * dr + dc * dc));
-}
-
-// Calculate Manhattan distance
-int Position::manhattanDistance(const Position& other) const {
-    return std::abs(row - other.row) + std::abs(col - other.col);
-}
-
-// Check if diagonal
+/**
+ * @brief Check if the param Position is diagonal to this Position or not
+ * 
+ * @param other 
+ * @return true 
+ * @return false 
+ */
 bool Position::isDiagonal(const Position& other) const {
     int dr = std::abs(row - other.row);
     int dc = std::abs(col - other.col);
     return dr == dc && dr != 0;
 }
 
-// Check if same row
+/**
+ * @brief Check if the param Position is in the same Row
+ * 
+ * @param other 
+ * @return true 
+ * @return false 
+ */
 bool Position::isSameRow(const Position& other) const {
     return row == other.row && col != other.col;
 }
 
-// Check if same column
+/**
+ * @brief Check if the param Position is in the same Column
+ * 
+ * @param other 
+ * @return true 
+ * @return false 
+ */
 bool Position::isSameColumn(const Position& other) const {
     return col == other.col && row != other.row;
 }
