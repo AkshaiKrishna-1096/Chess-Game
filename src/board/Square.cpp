@@ -1,8 +1,3 @@
-// ============================================================================
-// File: src/board/Square.cpp
-// Description: Implementation of Square class
-// ============================================================================
-
 #include "../../include/board/Square.h"
 #include "../../include/pieces/Piece.h"
 #include <sstream>
@@ -46,19 +41,10 @@ bool Square::isOccupied() const {
     return piece != nullptr;
 }
 
-bool Square::hasWhitePiece() const {
-    return piece != nullptr && piece->getColor() == Color::WHITE;
-}
-
-bool Square::hasBlackPiece() const {
-    return piece != nullptr && piece->getColor() == Color::BLACK;
-}
-
 bool Square::hasPieceOfColor(Color color) const {
     return piece != nullptr && piece->getColor() == color;
 }
 
-// Piece management
 void Square::setPiece(Piece* p) {
     piece = p;
 }
@@ -73,23 +59,14 @@ Piece* Square::removePieceAndReturn() {
     return temp;
 }
 
-// Display character
+/**
+ * @brief Display the Character in each Square
+ * 
+ * @return char 
+ */
 char Square::getDisplayChar() const {
     if (isEmpty()) {
         return '.';
     }
     return piece->getSymbol();
-}
-
-// String representation
-std::string Square::toString() const {
-    std::ostringstream oss;
-    oss << "Square[" << position.toString() << ", ";
-    if (isEmpty()) {
-        oss << "empty";
-    } else {
-        oss << "occupied by " << piece->getName();
-    }
-    oss << "]";
-    return oss.str();
 }

@@ -66,7 +66,6 @@ Game::~Game() {
 void Game::start() {
     // Initialize pieces on the board
     initializePieces();
-    board->initialize();
     state = GameState::ACTIVE;
     moveCount = 0;
     halfMoveClock = 0;

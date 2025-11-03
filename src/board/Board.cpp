@@ -1,8 +1,3 @@
-// ============================================================================
-// File: src/board/Board.cpp
-// Description: Implementation of Board class
-// ============================================================================
-
 #include "../../include/board/Board.h"
 #include "../../include/pieces/Piece.h"
 #include "../../include/pieces/Pawn.h"
@@ -40,7 +35,10 @@ Board::~Board() {
     lastMove = nullptr; // Don't delete - managed by Game
 }
 
-// Create all 64 squares
+/**
+ * @brief Dynamically create 64 Square in 8*8 Matrix
+ * 
+ */
 void Board::createSquares() {
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
@@ -51,19 +49,10 @@ void Board::createSquares() {
     }
 }
 
-// Initialize board with pieces in starting positions
-void Board::initialize() {
-    setupInitialPieces();
-}
-
-// Setup initial piece positions
-void Board::setupInitialPieces() {
-    // This method assumes pieces are created and added via addPiece()
-    // The actual piece creation is done by the Game class
-    // This method just prepares the board structure
-}
-
-// Clear all pieces from board
+/**
+ * @brief Clear all the pieces in the board
+ * 
+ */
 void Board::clear() {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -75,25 +64,25 @@ void Board::clear() {
     lastMove = nullptr;
 }
 
-// Reset board to initial state
+/**
+ * @brief Reset the Board into initial state.
+ * 
+ */
 void Board::reset() {
     clear();
-    initialize();
 }
 
-// Get square at position
+/**
+ * @brief Return a pointer to the Square with given Position
+ * 
+ * @param pos 
+ * @return Square* 
+ */
 Square* Board::getSquare(const Position& pos) const {
     if (!isValidPosition(pos)) {
         return nullptr;
     }
     return squares[pos.getRow()][pos.getCol()];
-}
-
-Square* Board::getSquare(int row, int col) const {
-    if (!isValidPosition(row, col)) {
-        return nullptr;
-    }
-    return squares[row][col];
 }
 
 // Get piece at position
@@ -356,18 +345,6 @@ void Board::display() const {
 // Display with coordinates
 void Board::displayWithCoordinates() const {
     display();
-}
-
-// String representation
-std::string Board::toString() const {
-    std::ostringstream oss;
-    for (int row = 0; row < 8; row++) {
-        for (int col = 0; col < 8; col++) {
-            oss << squares[row][col]->getDisplayChar();
-        }
-        oss << "\n";
-    }
-    return oss.str();
 }
 
 // Position validation

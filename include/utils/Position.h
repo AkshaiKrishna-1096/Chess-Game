@@ -1,9 +1,3 @@
-// ============================================================================
-// File: include/utils/Position.h
-// Description: Class representing a position on the chess board
-// Demonstrates: Encapsulation, Data Validation, Value Object Pattern
-// ============================================================================
-
 #ifndef POSITION_H
 #define POSITION_H
 
