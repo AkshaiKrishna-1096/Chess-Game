@@ -1,8 +1,3 @@
-// ============================================================================
-// File: src/game/Game.cpp
-// Description: Implementation of Game class
-// ============================================================================
-
 #include "../../include/game/Game.h"
 #include "../../include/pieces/Piece.h"
 #include "../../include/pieces/Pawn.h"
