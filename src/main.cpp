@@ -35,7 +35,7 @@ int main() {
     getline(cin, player2Name);
     if (player2Name.empty()) player2Name = "Black Player";
     
-    // Create game instance (demonstrates Object Creation and Composition)
+    // Create game object (demonstrates Object Creation and Composition)
     Game* game = new Game(player1Name, player2Name);
     
     cout << "\nGame starting!\n";
@@ -131,10 +131,10 @@ int main() {
     return 0;
 }
 
-// ============================================================================
-// Function Implementations
-// ============================================================================
-
+/**
+ * @brief Display the Welcome Message
+ * 
+ */
 void displayWelcomeMessage() {
     cout << "=======================================================\n";
     cout << "                                                       \n";
@@ -145,6 +145,10 @@ void displayWelcomeMessage() {
     cout << "=======================================================\n";
 }
 
+/**
+ * @brief Display Help Menu
+ * 
+ */
 void displayHelp() {
     cout << "\n=======================================================\n";
     cout << "                    HELP MENU                          \n";
@@ -170,6 +174,20 @@ void displayHelp() {
     cout << "=======================================================\n";
 }
 
+/**
+ * @brief Convert the given String into 2 substring (from and to)
+ * 
+ * @details 
+ * This function does two process. This function will take input String and address of String to and from.
+ * The String input is broken down and converted into Position object after checking if this is valid.
+ * Return whether the position are valid or not
+ * 
+ * @param input String
+ * @param from String
+ * @param to String
+ * @return true 
+ * @return false 
+ */
 bool parseInput(const string& input, Position& from, Position& to) {
     // Expected format: "e2 e4" or "e2e4" or "e2-e4"
     stringstream ss(input);
@@ -221,6 +239,14 @@ bool parseInput(const string& input, Position& from, Position& to) {
     return from.isValid() && to.isValid();
 }
 
+/**
+ * @brief 
+ * Convert the Position into rank and file from Position
+ * The value of Position is in Integer
+ * 
+ * @param pos // use 'int' to get the position
+ * @return string 
+ */
 string positionToString(const Position& pos) {
     // Convert array indices back to algebraic notation
     char col = 'a' + pos.getCol();
@@ -228,11 +254,20 @@ string positionToString(const Position& pos) {
     return string(1, col) + string(1, row);
 }
 
+/**
+ * @brief Remove any unwanted buffer still persisting in the buffer space
+ * 
+ */
 void clearInputBuffer() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+/**
+ * @brief Show the Game result
+ * 
+ * @param game 
+ */
 void displayGameResult(Game* game) {
     Player* winner = game->getWinner();
     cout << "\n=======================================================\n";

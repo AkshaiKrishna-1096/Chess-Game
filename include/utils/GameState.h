@@ -7,6 +7,10 @@
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
+/**
+ * @brief Define the state of the game right now
+ * 
+ */
 enum class GameState {
     ACTIVE,      // Game is ongoing
     CHECK,       // A king is in check
