@@ -10,7 +10,11 @@
 #include <algorithm>
 #include <limits>
 
-// Constructor
+/**
+ * @brief Constructs a new Game object with two players and initializes the board
+ * @param player1Name Name of the white player
+ * @param player2Name Name of the black player
+ */
 Game::Game(const std::string& player1Name, const std::string& player2Name)
     : board(nullptr), whitePlayer(nullptr), blackPlayer(nullptr), 
       currentPlayer(nullptr), state(GameState::ACTIVE), 
@@ -27,7 +31,9 @@ Game::Game(const std::string& player1Name, const std::string& player2Name)
     currentPlayer = whitePlayer;
 }
 
-// Destructor
+/**
+ * @brief Destroys the Game object and frees all allocated memory
+ */
 Game::~Game() {
     // Delete board
     if (board != nullptr) {
@@ -58,7 +64,9 @@ Game::~Game() {
     moveHistory.clear();
 }
 
-// Start the game
+/**
+ * @brief Starts a new chess game by initializing pieces and resetting counters
+ */
 void Game::start() {
     // Initialize pieces on the board
     initializePieces();
@@ -67,7 +75,9 @@ void Game::start() {
     halfMoveClock = 0;
 }
 
-// Initialize all pieces
+/**
+ * @brief Initializes all 32 chess pieces in their standard starting positions
+ */
 void Game::initializePieces() {
     // Clear any existing pieces
     board->clear();
@@ -123,7 +133,12 @@ void Game::initializePieces() {
     board->addPiece(new King(Color::BLACK, Position(0, 4)), Position(0, 4));
 }
 
-// Make a move
+/**
+ * @brief Attempts to execute a chess move and updates game state accordingly
+ * @param from Starting position of the piece
+ * @param to Destination position
+ * @return true if move was successful, false if invalid
+ */
 bool Game::makeMove(const Position& from, const Position& to) {
     // Validate positions
     if (!board->isValidPosition(from) || !board->isValidPosition(to)) {
@@ -190,12 +205,20 @@ bool Game::makeMove(const Position& from, const Position& to) {
     return true;
 }
 
-// Switch current player
+/**
+ * @brief Switches the current player to the opponent
+ */
 void Game::switchPlayer() {
     currentPlayer = (currentPlayer == whitePlayer) ? blackPlayer : whitePlayer;
 }
 
-// Check if move would result in check
+/**
+ * @brief Checks if a hypothetical move would leave the player's king in check
+ * @param from Starting position of the move
+ * @param to Destination position
+ * @param playerColor Color of the player making the move
+ * @return true if the move would result in check, false otherwise
+ */
 bool Game::wouldBeInCheck(const Position& from, const Position& to, Color playerColor) {
     // Temporarily make the move
     Piece* movingPiece = board->getPieceAt(from);
@@ -220,7 +243,9 @@ bool Game::wouldBeInCheck(const Position& from, const Position& to, Color player
     return inCheck;
 }
 
-// Update game state
+/**
+ * @brief Updates the game state by checking for check, checkmate, stalemate, or draw
+ */
 void Game::updateGameState() {
     updateCheckStatus();
     
@@ -239,23 +264,36 @@ void Game::updateGameState() {
     }
 }
 
-// Update check status for both players
+/**
+ * @brief Updates the check status for both white and black players
+ */
 void Game::updateCheckStatus() {
     whitePlayer->setIsInCheck(board->isKingInCheck(Color::WHITE));
     blackPlayer->setIsInCheck(board->isKingInCheck(Color::BLACK));
 }
 
-// Detect checkmate
+/**
+ * @brief Detects if the specified player is in checkmate
+ * @param color Color of the player to check
+ * @return true if player is in checkmate, false otherwise
+ */
 bool Game::detectCheckmate(Color color) {
     return board->isKingInCheck(color) && !hasLegalMoves(color);
 }
 
-// Detect stalemate
+/**
+ * @brief Detects if the specified player is in stalemate
+ * @param color Color of the player to check
+ * @return true if player is in stalemate, false otherwise
+ */
 bool Game::detectStalemate(Color color) {
     return !board->isKingInCheck(color) && !hasLegalMoves(color);
 }
 
-// Detect draw
+/**
+ * @brief Detects if the game should end in a draw (50-move rule or insufficient material)
+ * @return true if draw conditions are met, false otherwise
+ */
 bool Game::detectDraw() {
     // 50-move rule
     if (halfMoveClock >= 100) {  // 50 moves per player = 100 half-moves
@@ -272,7 +310,11 @@ bool Game::detectDraw() {
     return false;
 }
 
-// Check if player has legal moves
+/**
+ * @brief Checks if the specified player has any legal moves available
+ * @param color Color of the player to check
+ * @return true if player has at least one legal move, false otherwise
+ */
 bool Game::hasLegalMoves(Color color) {
     std::vector<Piece*> pieces = board->getPieces(color);
     
@@ -287,7 +329,10 @@ bool Game::hasLegalMoves(Color color) {
     return false;
 }
 
-// Handle captured piece
+/**
+ * @brief Handles a captured piece by updating the current player's score
+ * @param capturedPiece Pointer to the piece that was captured
+ */
 void Game::handleCapture(Piece* capturedPiece) {
     if (capturedPiece == nullptr) return;
     
@@ -303,7 +348,10 @@ void Game::handleCapture(Piece* capturedPiece) {
     currentPlayer->addCapturedPieceValue(pieceValue);
 }
 
-// Handle special moves
+/**
+ * @brief Handles special chess moves including castling, en passant, and pawn promotion
+ * @param move Pointer to the move object to check and update
+ */
 void Game::handleSpecialMoves(Move* move) {
     Piece* piece = move->getMovedPiece();
     if (piece == nullptr) return;
@@ -339,6 +387,12 @@ void Game::handleSpecialMoves(Move* move) {
     }
 }
 
+/**
+ * @brief Executes a castling move by moving the rook to its correct position
+ * @param from King's starting position
+ * @param to King's destination position
+ * @return true if castling was successful, false otherwise
+ */
 bool Game::handleCastling(const Position& from, const Position& to) {
     // Determine if king-side or queen-side castling
     bool kingSide = (to.getCol() > from.getCol());
@@ -369,6 +423,12 @@ bool Game::handleCastling(const Position& from, const Position& to) {
     return false;
 }
 
+/**
+ * @brief Executes an en passant capture by removing the captured pawn
+ * @param from Attacking pawn's starting position
+ * @param to Attacking pawn's destination position
+ * @return true if en passant was successful, false otherwise
+ */
 bool Game::handleEnPassant(const Position& from, const Position& to) {
     // Get the captured pawn's position (same column as 'to', same row as 'from')
     Position capturedPawnPos(from.getRow(), to.getCol());
@@ -390,6 +450,11 @@ bool Game::handleEnPassant(const Position& from, const Position& to) {
     return false;
 }
 
+/**
+ * @brief Handles pawn promotion by replacing the pawn with a chosen piece
+ * @param to Position of the pawn to promote
+ * @return true if promotion was successful, false otherwise
+ */
 bool Game::handlePromotion(const Position& to) {
     Piece* pawn = board->getPieceAt(to);
     if (pawn == nullptr || pawn->getName() != "Pawn") {
@@ -453,14 +518,46 @@ bool Game::handlePromotion(const Position& to) {
     return false;
 }
 
-// Getters
+/**
+ * @brief Gets the current game state
+ * @return Current GameState enum value
+ */
 GameState Game::getState() const { return state; }
+
+/**
+ * @brief Gets the current player
+ * @return Pointer to the current Player object
+ */
 Player* Game::getCurrentPlayer() const { return currentPlayer; }
+
+/**
+ * @brief Gets the white player
+ * @return Pointer to the white Player object
+ */
 Player* Game::getWhitePlayer() const { return whitePlayer; }
+
+/**
+ * @brief Gets the black player
+ * @return Pointer to the black Player object
+ */
 Player* Game::getBlackPlayer() const { return blackPlayer; }
+
+/**
+ * @brief Gets the game board
+ * @return Pointer to the Board object
+ */
 Board* Game::getBoard() const { return board; }
+
+/**
+ * @brief Gets the total number of moves made in the game
+ * @return Total move count
+ */
 int Game::getMoveCount() const { return moveCount; }
 
+/**
+ * @brief Gets the winner of the game if in checkmate state
+ * @return Pointer to winning Player or nullptr if no winner yet
+ */
 Player* Game::getWinner() const {
     if (state == GameState::CHECKMATE) {
         return (currentPlayer == whitePlayer) ? blackPlayer : whitePlayer;
@@ -468,40 +565,70 @@ Player* Game::getWinner() const {
     return nullptr;
 }
 
-// Check queries
+/**
+ * @brief Checks if the specified color's king is in check
+ * @param color Color of the player to check
+ * @return true if king is in check, false otherwise
+ */
 bool Game::isCheck(Color color) const {
     return board->isKingInCheck(color);
 }
 
+/**
+ * @brief Checks if the specified color is in checkmate
+ * @param color Color of the player to check
+ * @return true if player is in checkmate, false otherwise
+ */
 bool Game::isCheckmate(Color color) const {
     return state == GameState::CHECKMATE;
 }
 
+/**
+ * @brief Checks if the specified color is in stalemate
+ * @param color Color of the player to check
+ * @return true if player is in stalemate, false otherwise
+ */
 bool Game::isStalemate(Color color) const {
     return state == GameState::STALEMATE;
 }
 
+/**
+ * @brief Checks if the game ended in a draw
+ * @return true if game is a draw, false otherwise
+ */
 bool Game::isDraw() const {
     return state == GameState::DRAW;
 }
 
-// Move history
+/**
+ * @brief Gets the complete move history of the game
+ * @return Vector of pointers to Move objects
+ */
 std::vector<Move*> Game::getMoveHistory() const {
     return moveHistory;
 }
 
+/**
+ * @brief Gets the last move made in the game
+ * @return Pointer to the last Move object or nullptr if no moves made
+ */
 Move* Game::getLastMove() const {
     if (moveHistory.empty()) return nullptr;
     return moveHistory.back();
 }
 
-// Display methods
+/**
+ * @brief Displays the current state of the chess board
+ */
 void Game::displayBoard() const {
     if (board != nullptr) {
         board->display();
     }
 }
 
+/**
+ * @brief Displays game information including players, move count, and game state
+ */
 void Game::displayGameInfo() const {
     std::cout << "\n=== Game Information ===\n";
     std::cout << whitePlayer->toString() << "\n";
@@ -511,6 +638,9 @@ void Game::displayGameInfo() const {
     std::cout << "Game State: " << getGameStatus() << "\n";
 }
 
+/**
+ * @brief Displays the complete move history of the game
+ */
 void Game::displayMoveHistory() const {
     std::cout << "\n=== Move History ===\n";
     for (size_t i = 0; i < moveHistory.size(); i++) {
@@ -518,7 +648,10 @@ void Game::displayMoveHistory() const {
     }
 }
 
-// Game status string
+/**
+ * @brief Gets the game status as a string
+ * @return String representation of current game state
+ */
 std::string Game::getGameStatus() const {
     switch (state) {
         case GameState::ACTIVE: return "Active";
@@ -530,7 +663,9 @@ std::string Game::getGameStatus() const {
     }
 }
 
-// Reset game
+/**
+ * @brief Resets the game to initial state with all pieces in starting positions
+ */
 void Game::reset() {
     // Clear board and reinitialize
     board->clear();
@@ -553,10 +688,4 @@ void Game::reset() {
     state = GameState::ACTIVE;
     moveCount = 0;
     halfMoveClock = 0;
-}
-
-// Undo last move (optional implementation)
-void Game::undoMove() {
-    // Implementation for undo functionality
-    // This is complex and requires storing board states
 }
