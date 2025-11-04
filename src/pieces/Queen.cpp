@@ -1,24 +1,21 @@
-// ============================================================================
-// File: src/pieces/Queen.cpp
-// Description: Implementation of Queen class
-// ============================================================================
-
 #include "../../include/pieces/Queen.h"
 #include "../../include/board/Board.h"
-
+//constructor
 Queen::Queen(Color c, const Position& pos) : Piece(c, pos) {}
-
+//destructor
 Queen::~Queen() {}
-
+/**
+ * @brief Given the next position and current board,the function checks if the next move is a valid move or not.
+ */
 bool Queen::isValidMove(const Position& to, Board& board) {
     if (!to.isValid() || to == position) {
         return false;
     }
     
-    // Queen moves like rook or bishop (horizontally, vertically, or diagonally)
+    
     bool isRookMove = (position.getRow() == to.getRow() || position.getCol() == to.getCol());
     bool isBishopMove = position.isDiagonal(to);
-    
+    //if Queen doesn't move like rook or bishop (horizontally, vertically, or diagonally),return false.
     if (!isRookMove && !isBishopMove) {
         return false;
     }
@@ -28,7 +25,7 @@ bool Queen::isValidMove(const Position& to, Board& board) {
         return false;
     }
     
-    // Check destination square
+    // Check destination square and see if it's empty
     if (board.isSquareEmpty(to)) {
         return true;
     }
@@ -36,7 +33,9 @@ bool Queen::isValidMove(const Position& to, Board& board) {
     Piece* targetPiece = board.getPieceAt(to);
     return targetPiece != nullptr && !isSameColor(targetPiece);
 }
-
+/**
+ * @brief get all possible moves in a vector format
+ */
 std::vector<Position> Queen::getPossibleMoves(Board& board) {
     std::vector<Position> moves;
     
@@ -71,15 +70,21 @@ std::vector<Position> Queen::getPossibleMoves(Board& board) {
     
     return moves;
 }
-
+/**
+ * @brief Returns Capital Q if the piece is White,else small q.
+ */
 char Queen::getSymbol() const {
     return (color == Color::WHITE) ? 'Q' : 'q';
 }
-
+/**
+ * @brief returns the name of the piece
+ */
 std::string Queen::getName() const {
     return "Queen";
 }
-
+/**
+ * @brief Queen is highly valuable. so it returns 9.
+ */
 int Queen::getValue() const {
     return 9;
 }

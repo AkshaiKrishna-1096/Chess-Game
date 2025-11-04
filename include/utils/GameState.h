@@ -1,9 +1,3 @@
-// ============================================================================
-// File: include/utils/GameState.h
-// Description: Enumeration for game states
-// Demonstrates: Enumeration, State Management
-// ============================================================================
-
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 

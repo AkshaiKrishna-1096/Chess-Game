@@ -1,8 +1,3 @@
-// ============================================================================
-// File: src/utils/Position.cpp
-// Description: Implementation of Position class
-// ============================================================================
-
 #include "../../include/utils/Position.h"
 #include <cmath>
 #include <cctype>
