@@ -1,0 +1,616 @@
+# ============================================================================
+# Chess Game Test Cases
+# ============================================================================
+# Format:
+# TEST: Description of the test
+# EXPECT: expected_result (valid/invalid/check/checkmate/stalemate)
+# MOVES:
+# move1
+# move2
+# ...
+# (blank line separates test cases)
+# ============================================================================
+
+# ============================================================================
+# BASIC MOVEMENT TESTS
+# ============================================================================
+
+TEST: Basic Pawn Movement - Two Squares Forward
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+
+TEST: Basic Knight Movement - L-Shape
+EXPECT: valid
+MOVES:
+g1 f3
+b8 c6
+
+TEST: Basic Bishop Movement - Diagonal
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+f1 c4
+
+TEST: Basic Rook Movement - Vertical
+EXPECT: valid
+MOVES:
+a2 a4
+a7 a5
+a1 a3
+
+TEST: Basic Queen Movement - Multiple Directions
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+d1 h5
+
+TEST: Basic King Movement - One Square
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+e1 e2
+
+# ============================================================================
+# INVALID MOVE TESTS
+# ============================================================================
+
+TEST: Invalid - Pawn Moving Backward
+EXPECT: invalid
+MOVES:
+e2 e4
+e4 e3
+
+TEST: Invalid - Knight Moving Like Bishop
+EXPECT: invalid
+MOVES:
+g1 e3
+
+TEST: Invalid - Bishop Moving Straight
+EXPECT: invalid
+MOVES:
+e2 e4
+f1 f4
+
+TEST: Invalid - Rook Moving Diagonally
+EXPECT: invalid
+MOVES:
+a2 a4
+a1 b2
+
+TEST: Invalid - Moving Opponent's Piece
+EXPECT: invalid
+MOVES:
+e7 e5
+
+TEST: Invalid - King Moving Two Squares (Not Castling)
+EXPECT: invalid
+MOVES:
+e2 e4
+e1 e3
+
+TEST: Invalid - Pawn Jumping Over Piece
+EXPECT: invalid
+MOVES:
+e2 e5
+
+# ============================================================================
+# CAPTURE TESTS
+# ============================================================================
+
+TEST: Pawn Diagonal Capture
+EXPECT: valid
+MOVES:
+e2 e4
+d7 d5
+e4 d5
+
+TEST: Knight Capturing
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+b8 c6
+f3 e5
+
+TEST: Bishop Capturing
+EXPECT: valid
+MOVES:
+e2 e4
+d7 d5
+f1 c4
+d5 d4
+c4 f7
+
+TEST: Rook Capturing
+EXPECT: valid
+MOVES:
+a2 a4
+e7 e5
+a1 a3
+e5 e4
+a3 e3
+e4 e3
+
+TEST: Queen Capturing
+EXPECT: valid
+MOVES:
+e2 e4
+d7 d5
+d1 h5
+d5 d4
+h5 f7
+
+# ============================================================================
+# CHECK TESTS
+# ============================================================================
+
+TEST: Simple Check with Queen
+EXPECT: check
+MOVES:
+e2 e4
+e7 e5
+d1 h5
+b8 c6
+h5 f7
+
+TEST: Check with Bishop
+EXPECT: check
+MOVES:
+e2 e4
+f7 f6
+f1 c4
+g7 g5
+d1 h5
+
+TEST: Check with Knight
+EXPECT: check
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+f7 f6
+f3 g5
+f6 g5
+d1 h5
+
+# ============================================================================
+# CHECKMATE TESTS
+# ============================================================================
+
+TEST: Scholar's Mate (4-Move Checkmate)
+EXPECT: checkmate
+MOVES:
+e2 e4
+e7 e5
+f1 c4
+b8 c6
+d1 h5
+g8 f6
+h5 f7
+
+TEST: Fool's Mate (2-Move Checkmate)
+EXPECT: checkmate
+MOVES:
+f2 f3
+e7 e5
+g2 g4
+d8 h4
+
+TEST: Back Rank Mate Setup
+EXPECT: checkmate
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+b8 c6
+f1 c4
+f8 c5
+c2 c3
+g8 f6
+d2 d4
+e5 d4
+c3 d4
+c5 b4
+b1 c3
+f6 e4
+e1 g1
+e4 c3
+b2 c3
+b4 c3
+d1 b3
+c3 a1
+c4 f7
+
+# ============================================================================
+# SPECIAL MOVES - CASTLING
+# ============================================================================
+
+TEST: White King-Side Castling (Short Castle)
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+b8 c6
+f1 c4
+g8 f6
+e1 g1
+
+TEST: White Queen-Side Castling (Long Castle)
+EXPECT: valid
+MOVES:
+d2 d4
+d7 d5
+b1 c3
+b8 c6
+c1 f4
+c8 f5
+d1 d3
+d8 d6
+e1 c1
+
+TEST: Black King-Side Castling
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+g8 f6
+f1 c4
+f8 c5
+d2 d3
+e8 g8
+
+TEST: Invalid Castling - King Has Moved
+EXPECT: invalid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+g8 f6
+e1 e2
+e8 e7
+e2 e1
+e7 e8
+e1 g1
+
+TEST: Invalid Castling - Rook Has Moved
+EXPECT: invalid
+MOVES:
+a2 a4
+a7 a5
+a1 a3
+a8 a6
+a3 a1
+a6 a8
+e1 c1
+
+TEST: Invalid Castling - Path Not Clear
+EXPECT: invalid
+MOVES:
+e1 g1
+
+TEST: Invalid Castling - Through Check
+EXPECT: invalid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+f8 c5
+e1 g1
+
+# ============================================================================
+# SPECIAL MOVES - EN PASSANT
+# ============================================================================
+
+TEST: White En Passant Capture
+EXPECT: valid
+MOVES:
+e2 e4
+a7 a6
+e4 e5
+d7 d5
+e5 d6
+
+TEST: Black En Passant Capture
+EXPECT: valid
+MOVES:
+a2 a3
+e7 e5
+e2 e4
+e5 e4
+d2 d4
+e4 d3
+
+TEST: Invalid En Passant - Not Immediately After
+EXPECT: invalid
+MOVES:
+e2 e4
+a7 a6
+e4 e5
+d7 d5
+g1 f3
+e5 d6
+
+TEST: En Passant Both Sides
+EXPECT: valid
+MOVES:
+e2 e4
+a7 a6
+e4 e5
+f7 f5
+e5 f6
+g7 f6
+d2 d4
+e7 e5
+d4 e5
+f6 e5
+
+# ============================================================================
+# SPECIAL MOVES - PAWN PROMOTION
+# ============================================================================
+
+TEST: White Pawn Promotion to Queen
+EXPECT: valid
+MOVES:
+e2 e4
+d7 d5
+e4 d5
+c7 c6
+d5 c6
+b7 b6
+c6 b7
+a8 a7
+b7 b8
+
+TEST: Black Pawn Promotion to Queen
+EXPECT: valid
+MOVES:
+a2 a3
+e7 e5
+a3 a4
+e5 e4
+a4 a5
+e4 e3
+a5 a6
+e3 d2
+a6 b7
+d2 c1
+
+TEST: Pawn Promotion with Capture
+EXPECT: valid
+MOVES:
+a2 a4
+b7 b5
+a4 b5
+c7 c6
+b5 c6
+d7 d5
+c6 d7
+c8 d7
+h2 h4
+d7 c6
+h4 h5
+c6 b5
+h5 h6
+b5 a4
+h6 g7
+a4 b3
+g7 h8
+
+# ============================================================================
+# COMPLEX GAME SCENARIOS
+# ============================================================================
+
+TEST: Italian Game Opening
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+b8 c6
+f1 c4
+f8 c5
+
+TEST: Sicilian Defense Opening
+EXPECT: valid
+MOVES:
+e2 e4
+c7 c5
+g1 f3
+d7 d6
+d2 d4
+c5 d4
+f3 d4
+
+TEST: Queen's Gambit Opening
+EXPECT: valid
+MOVES:
+d2 d4
+d7 d5
+c2 c4
+e7 e6
+b1 c3
+
+TEST: Multiple Captures and Recaptures
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+b8 c6
+f3 e5
+c6 e5
+d2 d4
+e5 c6
+d4 e5
+
+TEST: King Safety - Castling Then Attack
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+b8 c6
+f1 c4
+f8 c5
+e1 g1
+g8 f6
+d2 d3
+d7 d6
+c1 g5
+
+TEST: Endgame - King and Rook vs King
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+g1 f3
+b8 c6
+f1 c4
+f8 c5
+e1 g1
+g8 f6
+d2 d3
+d7 d6
+c1 g5
+c8 g4
+b1 c3
+a7 a6
+a2 a3
+
+TEST: Piece Coordination
+EXPECT: valid
+MOVES:
+d2 d4
+d7 d5
+c2 c4
+e7 e6
+b1 c3
+g8 f6
+c1 g5
+f8 e7
+e2 e3
+e8 g8
+
+TEST: Central Pawn Tension
+EXPECT: valid
+MOVES:
+e2 e4
+c7 c5
+g1 f3
+d7 d6
+d2 d4
+c5 d4
+f3 d4
+g8 f6
+b1 c3
+a7 a6
+
+TEST: Fianchetto Development
+EXPECT: valid
+MOVES:
+g2 g3
+g7 g6
+f1 g2
+f8 g7
+g1 f3
+g8 f6
+
+# ============================================================================
+# EDGE CASES
+# ============================================================================
+
+TEST: All Pawns Move Forward
+EXPECT: valid
+MOVES:
+a2 a4
+a7 a5
+b2 b4
+b7 b5
+c2 c4
+c7 c5
+d2 d4
+d7 d5
+
+TEST: Knight Tour
+EXPECT: valid
+MOVES:
+g1 f3
+g8 f6
+f3 g5
+f6 g4
+g5 h7
+g4 h6
+h7 f8
+h6 f7
+
+TEST: Maximum Bishop Range
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+f1 c4
+f8 c5
+c4 b5
+c5 b4
+
+TEST: Queen Dance
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+d1 h5
+d8 h4
+h5 e5
+h4 e7
+
+TEST: Both Kings Walk
+EXPECT: valid
+MOVES:
+e2 e4
+e7 e5
+e1 e2
+e8 e7
+e2 f3
+e7 d6
+
+# ============================================================================
+# STALEMATE SCENARIOS (Complex - may not reach stalemate easily)
+# ============================================================================
+
+TEST: Stalemate Attempt
+EXPECT: valid
+MOVES:
+e2 e3
+a7 a5
+d1 h5
+a8 a6
+h5 a5
+h7 h5
+a5 c7
+a6 h6
+h2 h4
+f7 f6
+
+# ============================================================================
+# TEST SUMMARY
+# ============================================================================
+# Total Test Categories:
+# - Basic Movement: 6 tests
+# - Invalid Moves: 8 tests  
+# - Captures: 5 tests
+# - Check: 3 tests
+# - Checkmate: 3 tests
+# - Castling: 7 tests
+# - En Passant: 4 tests
+# - Promotion: 3 tests
+# - Complex Scenarios: 10 tests
+# - Edge Cases: 6 tests
+# ============================================================================

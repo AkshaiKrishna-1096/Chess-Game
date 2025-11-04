@@ -1,3 +1,10 @@
+# ============================================================================
+# Chess Game Makefile
+# ============================================================================
+# This Makefile compiles the Chess Game with proper dependency management
+# Place this file in the root directory: ChessGame/Makefile
+# ============================================================================
+
 # Compiler and flags
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall -Wextra -Iinclude
@@ -11,6 +18,7 @@ INCLUDE_DIR = include
 
 # Target executable
 TARGET = $(BIN_DIR)/chess
+TEST_TARGET = $(BIN_DIR)/chess_test
 
 # Source files (organized by component)
 UTILS_SRC = $(SRC_DIR)/utils/Position.cpp
@@ -31,9 +39,11 @@ GAME_SRC = $(SRC_DIR)/game/Move.cpp \
            $(SRC_DIR)/game/Game.cpp
 
 MAIN_SRC = $(SRC_DIR)/main.cpp
+TEST_MAIN_SRC = $(SRC_DIR)/test_main.cpp
 
 # All source files
 SOURCES = $(UTILS_SRC) $(PIECES_SRC) $(BOARD_SRC) $(GAME_SRC) $(MAIN_SRC)
+TEST_SOURCES = $(UTILS_SRC) $(PIECES_SRC) $(BOARD_SRC) $(GAME_SRC) $(TEST_MAIN_SRC)
 
 # Object files (replace src/ with obj/ and .cpp with .o)
 OBJECTS = $(UTILS_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
@@ -41,6 +51,12 @@ OBJECTS = $(UTILS_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
           $(BOARD_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
           $(GAME_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
           $(MAIN_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+
+TEST_OBJECTS = $(UTILS_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+               $(PIECES_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+               $(BOARD_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+               $(GAME_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+               $(TEST_MAIN_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 # Default target
 all: directories $(TARGET)
@@ -58,6 +74,12 @@ $(TARGET): $(OBJECTS)
 	@echo "Linking: $@"
 	$(CXX) $(OBJECTS) -o $@ $(LDFLAGS)
 	@echo "Build complete! Executable: $(TARGET)"
+
+# Link test executable
+$(TEST_TARGET): $(TEST_OBJECTS)
+	@echo "Linking test executable: $@"
+	$(CXX) $(TEST_OBJECTS) -o $@ $(LDFLAGS)
+	@echo "Test build complete! Executable: $(TEST_TARGET)"
 
 # Compile source files to object files
 
@@ -101,15 +123,10 @@ run: all
 	@echo "Starting Chess Game..."
 	@./$(TARGET)
 
-# Debug build (with -g flag)
-debug: CXXFLAGS += -g -DDEBUG
-debug: clean all
-	@echo "Debug build complete!"
-
-# Release build (with optimization)
-release: CXXFLAGS += -O3 -DNDEBUG
-release: clean all
-	@echo "Release build complete!"
+# Build and run tests
+test: $(TEST_TARGET)
+	@echo "Running automated tests from test.txt..."
+	@./$(TEST_TARGET)
 
 # Install (copy to system bin - requires sudo)
 install: release
@@ -128,6 +145,7 @@ help:
 	@echo "Chess Game Makefile - Available targets:"
 	@echo "  make              - Build the project (default)"
 	@echo "  make all          - Build the project"
+	@echo "  make test         - Build and run automated tests from test.txt"
 	@echo "  make clean        - Remove all build artifacts"
 	@echo "  make rebuild      - Clean and rebuild"
 	@echo "  make run          - Build and run the game"
