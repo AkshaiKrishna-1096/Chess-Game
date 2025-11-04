@@ -8,6 +8,7 @@
 #include "../../include/pieces/King.h"
 #include <iostream>
 #include <algorithm>
+#include <limits>
 
 // Constructor
 Game::Game(const std::string& player1Name, const std::string& player2Name)
@@ -304,22 +305,151 @@ void Game::handleCapture(Piece* capturedPiece) {
 
 // Handle special moves
 void Game::handleSpecialMoves(Move* move) {
-    // Check for castling, en passant, promotion
-    // Implementation depends on specific piece logic
+    Piece* piece = move->getMovedPiece();
+    if (piece == nullptr) return;
+    
+    Position from = move->getFrom();
+    Position to = move->getTo();
+    
+    // Check for castling (King moving 2 squares horizontally)
+    if (piece->getName() == "King") {
+        int colDiff = std::abs(to.getCol() - from.getCol());
+        if (colDiff == 2) {
+            handleCastling(from, to);
+            move->setIsCastling(true);
+            return;
+        }
+    }
+    
+    // Check for en passant (Pawn capturing diagonally to empty square)
+    if (piece->getName() == "Pawn") {
+        int colDiff = std::abs(to.getCol() - from.getCol());
+        if (colDiff == 1 && board->isSquareEmpty(to)) {
+            // This is en passant
+            handleEnPassant(from, to);
+            move->setIsEnPassant(true);
+        }
+        
+        // Check for promotion (Pawn reaching opposite end)
+        Pawn* pawn = dynamic_cast<Pawn*>(piece);
+        if (pawn && pawn->canPromote()) {
+            handlePromotion(to);
+            move->setIsPromotion(true);
+        }
+    }
 }
 
 bool Game::handleCastling(const Position& from, const Position& to) {
-    // Castling logic
+    // Determine if king-side or queen-side castling
+    bool kingSide = (to.getCol() > from.getCol());
+    int row = from.getRow();
+    
+    Position rookFrom, rookTo;
+    
+    if (kingSide) {
+        // King-side castling: Rook moves from h-file to f-file
+        rookFrom = Position(row, 7);
+        rookTo = Position(row, 5);
+    } else {
+        // Queen-side castling: Rook moves from a-file to d-file
+        rookFrom = Position(row, 0);
+        rookTo = Position(row, 3);
+    }
+    
+    // Move the rook
+    Piece* rook = board->getPieceAt(rookFrom);
+    if (rook != nullptr && rook->getName() == "Rook") {
+        board->getSquare(rookFrom)->removePiece();
+        board->getSquare(rookTo)->setPiece(rook);
+        rook->setPosition(rookTo);
+        rook->setHasMoved(true);
+        return true;
+    }
+    
     return false;
 }
 
 bool Game::handleEnPassant(const Position& from, const Position& to) {
-    // En passant logic
+    // Get the captured pawn's position (same column as 'to', same row as 'from')
+    Position capturedPawnPos(from.getRow(), to.getCol());
+    
+    Piece* capturedPawn = board->getPieceAt(capturedPawnPos);
+    if (capturedPawn != nullptr && capturedPawn->getName() == "Pawn") {
+        // Remove the captured pawn
+        board->removePiece(capturedPawnPos);
+        
+        // Add score for capturing the pawn
+        handleCapture(capturedPawn);
+        
+        // Delete the captured pawn
+        delete capturedPawn;
+        
+        return true;
+    }
+    
     return false;
 }
 
 bool Game::handlePromotion(const Position& to) {
-    // Promotion logic
+    Piece* pawn = board->getPieceAt(to);
+    if (pawn == nullptr || pawn->getName() != "Pawn") {
+        return false;
+    }
+    
+    Color color = pawn->getColor();
+    
+    // Ask player what piece they want to promote to
+    std::cout << "\n*** PAWN PROMOTION ***\n";
+    std::cout << "Choose piece to promote to:\n";
+    std::cout << "  Q - Queen\n";
+    std::cout << "  R - Rook\n";
+    std::cout << "  B - Bishop\n";
+    std::cout << "  N - Knight\n";
+    std::cout << "Enter choice (Q/R/B/N): ";
+    
+    char choice;
+    std::cin >> choice;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    choice = std::toupper(choice);
+    
+    // Default to Queen if invalid input
+    if (choice != 'Q' && choice != 'R' && choice != 'B' && choice != 'N') {
+        std::cout << "Invalid choice. Promoting to Queen by default.\n";
+        choice = 'Q';
+    }
+    
+    // Remove the pawn from board
+    board->removePiece(to);
+    delete pawn;
+    
+    // Create the new piece
+    Piece* newPiece = nullptr;
+    switch (choice) {
+        case 'Q':
+            newPiece = new Queen(color, to);
+            std::cout << "Promoted to Queen!\n";
+            break;
+        case 'R':
+            newPiece = new Rook(color, to);
+            std::cout << "Promoted to Rook!\n";
+            break;
+        case 'B':
+            newPiece = new Bishop(color, to);
+            std::cout << "Promoted to Bishop!\n";
+            break;
+        case 'N':
+            newPiece = new Knight(color, to);
+            std::cout << "Promoted to Knight!\n";
+            break;
+    }
+    
+    // Add the new piece to the board
+    if (newPiece != nullptr) {
+        newPiece->setHasMoved(true);
+        board->addPiece(newPiece, to);
+        return true;
+    }
+    
     return false;
 }
 
