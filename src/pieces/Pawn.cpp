@@ -1,9 +1,3 @@
-
-// ============================================================================
-// File: src/pieces/Pawn.cpp
-// Description: Implementation of Pawn class
-// ============================================================================
-
 #include "../../include/pieces/Pawn.h"
 #include "../../include/board/Board.h"
 #include "../../include/game/Move.h"

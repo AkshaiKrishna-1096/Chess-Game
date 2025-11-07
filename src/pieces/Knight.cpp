@@ -1,8 +1,3 @@
-// ============================================================================
-// File: src/pieces/Knight.cpp
-// Description: Implementation of Knight class
-// ============================================================================
-
 #include "../../include/pieces/Knight.h"
 #include "../../include/board/Board.h"
 #include <cmath>

@@ -1,8 +1,3 @@
-// ============================================================================
-// File: src/pieces/King.cpp
-// Description: Implementation of King class
-// ============================================================================
-
 #include "../../include/pieces/King.h"
 #include "../../include/board/Board.h"
 #include <cmath>

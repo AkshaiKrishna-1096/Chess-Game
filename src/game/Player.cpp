@@ -1,9 +1,3 @@
-
-// ============================================================================
-// File: src/game/Player.cpp
-// Description: Implementation of Player class
-// ============================================================================
-
 #include "../../include/game/Player.h"
 #include <sstream>
 
