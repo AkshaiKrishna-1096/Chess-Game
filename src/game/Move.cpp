@@ -1,8 +1,3 @@
-// ============================================================================
-// File: src/game/Move.cpp
-// Description: Implementation of Move class
-// ============================================================================
-
 #include "../../include/game/Move.h"
 #include "../../include/pieces/Piece.h"
 #include <sstream>

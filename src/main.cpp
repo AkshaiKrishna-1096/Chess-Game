@@ -1,9 +1,3 @@
-// ============================================================================
-// File: src/main.cpp
-// Description: Entry point for the Chess Game application
-// Demonstrates OOP concepts and game flow
-// ============================================================================
-
 #include "../include/ChessGame.h"
 #include <iostream>
 #include <string>

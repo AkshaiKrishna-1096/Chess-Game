@@ -1,8 +1,3 @@
-// ============================================================================
-// File: include/pieces/Queen.h
-// Description: Queen piece implementation
-// ============================================================================
-
 #ifndef QUEEN_H
 #define QUEEN_H
 
@@ -20,4 +15,4 @@ public:
     int getValue() const override;
 };
 
-#endif // QUEEN_H
+#endif 

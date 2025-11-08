@@ -1,8 +1,3 @@
-// ============================================================================
-// File: include/pieces/Bishop.h
-// Description: Bishop piece implementation
-// ============================================================================
-
 #ifndef BISHOP_H
 #define BISHOP_H
 
