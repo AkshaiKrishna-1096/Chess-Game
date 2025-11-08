@@ -1,16 +1,30 @@
-// ============================================================================
-// File: src/pieces/King.cpp
-// Description: Implementation of King class
-// ============================================================================
-
 #include "../../include/pieces/King.h"
 #include "../../include/board/Board.h"
 #include <cmath>
 
+/**
+ * @brief Constructs a King piece with a given color and initial position.
+ * @param c The color of the King (WHITE or BLACK).
+ * @param pos The initial position of the King on the board.
+ */
 King::King(Color c, const Position& pos) : Piece(c, pos) {}
 
+/**
+ * @brief Destructor for the King class.
+ */
 King::~King() {}
 
+/**
+ * @brief Checks whether a move to a given position is valid for the King.
+ * 
+ * The King can move one square in any direction or perform a castling move 
+ * (two squares horizontally under specific conditions).
+ * 
+ * @param to The target position to move to.
+ * @param board Reference to the current game board.
+ * @return true If the move is valid according to chess rules.
+ * @return false If the move is invalid.
+ */
 bool King::isValidMove(const Position& to, Board& board) {
     if (!to.isValid() || to == position) {
         return false;
@@ -39,6 +53,14 @@ bool King::isValidMove(const Position& to, Board& board) {
     return false;
 }
 
+/**
+ * @brief Retrieves all possible legal moves for the King from its current position.
+ * 
+ * Includes normal one-square moves in all directions and potential castling moves.
+ * 
+ * @param board Reference to the current game board.
+ * @return std::vector<Position> A list of all valid target positions.
+ */
 std::vector<Position> King::getPossibleMoves(Board& board) {
     std::vector<Position> moves;
     
@@ -77,6 +99,17 @@ std::vector<Position> King::getPossibleMoves(Board& board) {
     return moves;
 }
 
+/**
+ * @brief Determines if the King can castle on a given side.
+ * 
+ * This checks if the King and corresponding Rook have not moved, and 
+ * if all intermediate squares are empty and not under attack.
+ * 
+ * @param kingSide True for king-side castling, false for queen-side castling.
+ * @param board Reference to the current game board.
+ * @return true If castling is legally possible.
+ * @return false Otherwise.
+ */
 bool King::canCastle(bool kingSide, Board& board) const {
     if (hasMoved) return false;
     
@@ -87,6 +120,18 @@ bool King::canCastle(bool kingSide, Board& board) const {
     }
 }
 
+/**
+ * @brief Checks whether the King can legally castle on the king-side (short castling).
+ * 
+ * Conditions:
+ * - The King and the rook on the h-file have not moved.
+ * - Squares between them are empty.
+ * - The King is not in check and does not pass through attacked squares.
+ * 
+ * @param board Reference to the current game board.
+ * @return true If king-side castling is possible.
+ * @return false Otherwise.
+ */
 bool King::canCastleKingSide(Board& board) const {
     int row = position.getRow();
     int col = position.getCol();
@@ -116,6 +161,18 @@ bool King::canCastleKingSide(Board& board) const {
     return true;
 }
 
+/**
+ * @brief Checks whether the King can legally castle on the queen-side (long castling).
+ * 
+ * Conditions:
+ * - The King and the rook on the a-file have not moved.
+ * - Squares between them are empty.
+ * - The King is not in check and does not pass through attacked squares.
+ * 
+ * @param board Reference to the current game board.
+ * @return true If queen-side castling is possible.
+ * @return false Otherwise.
+ */
 bool King::canCastleQueenSide(Board& board) const {
     int row = position.getRow();
     int col = position.getCol();
@@ -145,14 +202,33 @@ bool King::canCastleQueenSide(Board& board) const {
     return true;
 }
 
+/**
+ * @brief Returns the character symbol representing the King.
+ * 
+ * Uppercase for white ('K'), lowercase for black ('k').
+ * 
+ * @return char The King’s symbol.
+ */
 char King::getSymbol() const {
     return (color == Color::WHITE) ? 'K' : 'k';
 }
 
+/**
+ * @brief Returns the name of the piece.
+ * @return std::string Always returns "King".
+ */
 std::string King::getName() const {
     return "King";
 }
 
+/**
+ * @brief Returns the value of the King piece.
+ * 
+ * Since the King is irreplaceable (the game ends if captured),
+ * its value is represented as 0.
+ * 
+ * @return int Always returns 0.
+ */
 int King::getValue() const {
     return 0; // King is priceless (game ends if captured)
 }

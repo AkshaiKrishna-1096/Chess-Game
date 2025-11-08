@@ -1,8 +1,3 @@
-// ============================================================================
-// File: include/pieces/King.h
-// Description: King piece implementation
-// ============================================================================
-
 #ifndef KING_H
 #define KING_H
 
@@ -23,8 +18,8 @@ public:
     std::string getName() const override;
     int getValue() const override;
     
-    // King-specific methods
+    
     bool canCastle(bool kingSide, Board& board) const;
 };
 
-#endif // KING_H
+#endif 

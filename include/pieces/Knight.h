@@ -1,8 +1,3 @@
-// ============================================================================
-// File: include/pieces/Knight.h
-// Description: Knight piece implementation
-// ============================================================================
-
 #ifndef KNIGHT_H
 #define KNIGHT_H
 
@@ -20,4 +15,4 @@ public:
     int getValue() const override;
 };
 
-#endif // KNIGHT_H
+#endif 
