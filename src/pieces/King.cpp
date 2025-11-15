@@ -221,14 +221,3 @@ std::string King::getName() const {
     return "King";
 }
 
-/**
- * @brief Returns the value of the King piece.
- * 
- * Since the King is irreplaceable (the game ends if captured),
- * its value is represented as 0.
- * 
- * @return int Always returns 0.
- */
-int King::getValue() const {
-    return 0; // King is priceless (game ends if captured)
-}

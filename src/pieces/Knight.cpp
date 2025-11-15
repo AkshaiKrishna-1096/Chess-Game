@@ -104,13 +104,3 @@ std::string Knight::getName() const {
     return "Knight";
 }
 
-/**
- * @brief Returns the relative material value of the Knight piece.
- * 
- * In standard chess evaluation, the Knight is typically worth 3 points.
- * 
- * @return int The value of the Knight (3).
- */
-int Knight::getValue() const {
-    return 3;
-}

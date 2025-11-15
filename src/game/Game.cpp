@@ -531,30 +531,6 @@ GameState Game::getState() const { return state; }
 Player* Game::getCurrentPlayer() const { return currentPlayer; }
 
 /**
- * @brief Gets the white player
- * @return Pointer to the white Player object
- */
-Player* Game::getWhitePlayer() const { return whitePlayer; }
-
-/**
- * @brief Gets the black player
- * @return Pointer to the black Player object
- */
-Player* Game::getBlackPlayer() const { return blackPlayer; }
-
-/**
- * @brief Gets the game board
- * @return Pointer to the Board object
- */
-Board* Game::getBoard() const { return board; }
-
-/**
- * @brief Gets the total number of moves made in the game
- * @return Total move count
- */
-int Game::getMoveCount() const { return moveCount; }
-
-/**
  * @brief Gets the winner of the game if in checkmate state
  * @return Pointer to winning Player or nullptr if no winner yet
  */
@@ -566,55 +542,11 @@ Player* Game::getWinner() const {
 }
 
 /**
- * @brief Checks if the specified color's king is in check
- * @param color Color of the player to check
- * @return true if king is in check, false otherwise
+ * @brief Gets the game board (for testing purposes)
+ * @return Pointer to the Board object
  */
-bool Game::isCheck(Color color) const {
-    return board->isKingInCheck(color);
-}
-
-/**
- * @brief Checks if the specified color is in checkmate
- * @param color Color of the player to check
- * @return true if player is in checkmate, false otherwise
- */
-bool Game::isCheckmate(Color color) const {
-    return state == GameState::CHECKMATE;
-}
-
-/**
- * @brief Checks if the specified color is in stalemate
- * @param color Color of the player to check
- * @return true if player is in stalemate, false otherwise
- */
-bool Game::isStalemate(Color color) const {
-    return state == GameState::STALEMATE;
-}
-
-/**
- * @brief Checks if the game ended in a draw
- * @return true if game is a draw, false otherwise
- */
-bool Game::isDraw() const {
-    return state == GameState::DRAW;
-}
-
-/**
- * @brief Gets the complete move history of the game
- * @return Vector of pointers to Move objects
- */
-std::vector<Move*> Game::getMoveHistory() const {
-    return moveHistory;
-}
-
-/**
- * @brief Gets the last move made in the game
- * @return Pointer to the last Move object or nullptr if no moves made
- */
-Move* Game::getLastMove() const {
-    if (moveHistory.empty()) return nullptr;
-    return moveHistory.back();
+Board* Game::getBoard() const {
+    return board;
 }
 
 /**
@@ -624,68 +556,4 @@ void Game::displayBoard() const {
     if (board != nullptr) {
         board->display();
     }
-}
-
-/**
- * @brief Displays game information including players, move count, and game state
- */
-void Game::displayGameInfo() const {
-    std::cout << "\n=== Game Information ===\n";
-    std::cout << whitePlayer->toString() << "\n";
-    std::cout << blackPlayer->toString() << "\n";
-    std::cout << "Move Count: " << moveCount << "\n";
-    std::cout << "Current Player: " << currentPlayer->getName() << "\n";
-    std::cout << "Game State: " << getGameStatus() << "\n";
-}
-
-/**
- * @brief Displays the complete move history of the game
- */
-void Game::displayMoveHistory() const {
-    std::cout << "\n=== Move History ===\n";
-    for (size_t i = 0; i < moveHistory.size(); i++) {
-        std::cout << (i + 1) << ". " << moveHistory[i]->toString() << "\n";
-    }
-}
-
-/**
- * @brief Gets the game status as a string
- * @return String representation of current game state
- */
-std::string Game::getGameStatus() const {
-    switch (state) {
-        case GameState::ACTIVE: return "Active";
-        case GameState::CHECK: return "Check";
-        case GameState::CHECKMATE: return "Checkmate";
-        case GameState::STALEMATE: return "Stalemate";
-        case GameState::DRAW: return "Draw";
-        default: return "Unknown";
-    }
-}
-
-/**
- * @brief Resets the game to initial state with all pieces in starting positions
- */
-void Game::reset() {
-    // Clear board and reinitialize
-    board->clear();
-    start();
-    
-    // Reset players
-    whitePlayer->resetScore();
-    blackPlayer->resetScore();
-    whitePlayer->setIsInCheck(false);
-    blackPlayer->setIsInCheck(false);
-    
-    // Clear move history
-    for (Move* move : moveHistory) {
-        delete move;
-    }
-    moveHistory.clear();
-    
-    // Reset state
-    currentPlayer = whitePlayer;
-    state = GameState::ACTIVE;
-    moveCount = 0;
-    halfMoveClock = 0;
 }

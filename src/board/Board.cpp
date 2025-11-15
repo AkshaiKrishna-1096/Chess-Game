@@ -65,14 +65,6 @@ void Board::clear() {
 }
 
 /**
- * @brief Reset the Board into initial state.
- * 
- */
-void Board::reset() {
-    clear();
-}
-
-/**
  * @brief Return a pointer to the Square with given Position
  * 
  * @param pos 
@@ -94,9 +86,6 @@ Piece* Board::getPieceAt(const Position& pos) const {
     return square->getPiece();
 }
 
-Piece* Board::getPieceAt(int row, int col) const {
-    return getPieceAt(Position(row, col));
-}
 
 // Get all pieces of a color
 std::vector<Piece*> Board::getPieces(Color color) const {
@@ -173,7 +162,7 @@ bool Board::movePiece(const Position& from, const Position& to) {
     }
     
     // Remove captured piece if any
-    Piece* capturedPiece = removePiece(to);
+    removePiece(to);
     
     // Move the piece
     getSquare(from)->removePiece();
@@ -342,16 +331,7 @@ void Board::display() const {
     std::cout << "    a   b   c   d   e   f   g   h\n\n";
 }
 
-// Display with coordinates
-void Board::displayWithCoordinates() const {
-    display();
-}
-
 // Position validation
 bool Board::isValidPosition(const Position& pos) const {
     return pos.isValid();
-}
-
-bool Board::isValidPosition(int row, int col) const {
-    return Position::isValid(row, col);
 }

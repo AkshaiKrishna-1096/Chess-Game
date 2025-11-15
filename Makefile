@@ -31,9 +31,13 @@ GAME_SRC = $(SRC_DIR)/game/Move.cpp \
            $(SRC_DIR)/game/Game.cpp
 
 MAIN_SRC = $(SRC_DIR)/main.cpp
+TEST_SRC = $(SRC_DIR)/test/ChessTests.cpp
 
 # All source files
 SOURCES = $(UTILS_SRC) $(PIECES_SRC) $(BOARD_SRC) $(GAME_SRC) $(MAIN_SRC)
+
+# Test source files (all sources except main)
+TEST_SOURCES = $(UTILS_SRC) $(PIECES_SRC) $(BOARD_SRC) $(GAME_SRC) $(TEST_SRC)
 
 # Object files (replace src/ with obj/ and .cpp with .o)
 OBJECTS = $(UTILS_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
@@ -41,6 +45,13 @@ OBJECTS = $(UTILS_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
           $(BOARD_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
           $(GAME_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
           $(MAIN_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+
+# Test object files
+TEST_OBJECTS = $(UTILS_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+               $(PIECES_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+               $(BOARD_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+               $(GAME_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o) \
+               $(TEST_SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 
 # Default target
 all: directories $(TARGET)
@@ -51,6 +62,7 @@ directories:
 	@mkdir -p $(OBJ_DIR)/pieces
 	@mkdir -p $(OBJ_DIR)/board
 	@mkdir -p $(OBJ_DIR)/game
+	@mkdir -p $(OBJ_DIR)/test
 	@mkdir -p $(BIN_DIR)
 
 # Link object files to create executable
@@ -86,6 +98,11 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo "Compiling: $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Test
+$(OBJ_DIR)/test/%.o: $(SRC_DIR)/test/%.cpp
+	@echo "Compiling: $<"
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
 # Clean build artifacts
 clean:
 	@echo "Cleaning build artifacts..."
@@ -100,6 +117,18 @@ rebuild: clean all
 run: all
 	@echo "Starting Chess Game..."
 	@./$(TARGET)
+
+# Test target
+TEST_TARGET = $(BIN_DIR)/chess_test
+
+$(TEST_TARGET): $(TEST_OBJECTS)
+	@echo "Linking test: $@"
+	$(CXX) $(TEST_OBJECTS) -o $@ $(LDFLAGS)
+	@echo "Test build complete! Executable: $(TEST_TARGET)"
+
+test: directories $(TEST_TARGET)
+	@echo "Running Chess Game Tests..."
+	@./$(TEST_TARGET)
 
 # Debug build (with -g flag)
 debug: CXXFLAGS += -g -DDEBUG

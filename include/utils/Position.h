@@ -27,8 +27,6 @@ public:
     int getCol() const;
     
     // Setters (Encapsulation with Validation)
-    void setRow(int r);
-    void setCol(int c);
     void setPosition(int r, int c);
     
     // Validation
@@ -41,15 +39,8 @@ public:
     
     std::string toString() const;  // Returns algebraic notation (e.g., "e4")
     
-    // Static factory method for creating position from algebraic notation
-    static Position fromString(const std::string& notation);
-    
     // Check if positions are diagonal
     bool isDiagonal(const Position& other) const;
-    
-    // Check if positions are in same row or column
-    bool isSameRow(const Position& other) const;
-    bool isSameColumn(const Position& other) const;
 };
 
 #endif // POSITION_H

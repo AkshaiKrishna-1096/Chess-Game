@@ -3,7 +3,6 @@
 #include <string>
 #include <sstream>
 #include <cctype>
-#include <limits>
 
 using namespace std;
 
@@ -11,8 +10,6 @@ using namespace std;
 void displayWelcomeMessage();
 void displayHelp();
 bool parseInput(const string& input, Position& from, Position& to);
-string positionToString(const Position& pos);
-void clearInputBuffer();
 void displayGameResult(Game* game);
 
 int main() {
@@ -107,8 +104,8 @@ int main() {
                 if (!moveSuccess) {
                     cout << "\nInvalid move! Try again.\n";
                 } else {
-                    cout << "\nMove executed: " << positionToString(from) 
-                         << " -> " << positionToString(to) << "\n";
+                    cout << "\nMove executed: " << from.toString() 
+                         << " -> " << to.toString() << "\n";
                 }
             } else {
                 cout << "\nInvalid input format! Use format like 'e2 e4' or type 'help'\n";
@@ -231,30 +228,6 @@ bool parseInput(const string& input, Position& from, Position& to) {
     to = Position(toRow, toCol);
     
     return from.isValid() && to.isValid();
-}
-
-/**
- * @brief 
- * Convert the Position into rank and file from Position
- * The value of Position is in Integer
- * 
- * @param pos // use 'int' to get the position
- * @return string 
- */
-string positionToString(const Position& pos) {
-    // Convert array indices back to algebraic notation
-    char col = 'a' + pos.getCol();
-    char row = '1' + (7 - pos.getRow());  // Invert back
-    return string(1, col) + string(1, row);
-}
-
-/**
- * @brief Remove any unwanted buffer still persisting in the buffer space
- * 
- */
-void clearInputBuffer() {
-    cin.clear();
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
 /**

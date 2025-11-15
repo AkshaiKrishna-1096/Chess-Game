@@ -1,6 +1,5 @@
 #include "../../include/game/Move.h"
 #include "../../include/pieces/Piece.h"
-#include <sstream>
 
 // Default constructor
 Move::Move() 
@@ -44,15 +43,10 @@ Move::~Move() {
     // Don't delete pieces - they're managed by Game class
 }
 
-// Getters
+// Getters (only what's actually used)
 Position Move::getFrom() const { return from; }
 Position Move::getTo() const { return to; }
 Piece* Move::getMovedPiece() const { return movedPiece; }
-Piece* Move::getCapturedPiece() const { return capturedPiece; }
-bool Move::getIsCastling() const { return isCastling; }
-bool Move::getIsEnPassant() const { return isEnPassant; }
-bool Move::getIsPromotion() const { return isPromotion; }
-char Move::getPromotionPiece() const { return promotionPiece; }
 
 // Setters
 void Move::setCapturedPiece(Piece* piece) { capturedPiece = piece; }
@@ -63,40 +57,3 @@ void Move::setIsPromotion(bool promotion, char piece) {
     promotionPiece = piece;
 }
 
-// String representation
-std::string Move::toString() const {
-    std::ostringstream oss;
-    oss << from.toString() << " -> " << to.toString();
-    if (capturedPiece != nullptr) {
-        oss << " (captures " << capturedPiece->getName() << ")";
-    }
-    if (isCastling) oss << " (castling)";
-    if (isEnPassant) oss << " (en passant)";
-    if (isPromotion) oss << " (promotion to " << promotionPiece << ")";
-    return oss.str();
-}
-
-// Algebraic notation
-std::string Move::toAlgebraicNotation() const {
-    std::string notation;
-    if (movedPiece != nullptr) {
-        char symbol = movedPiece->getSymbol();
-        if (symbol != 'P' && symbol != 'p') {
-            notation += toupper(symbol);
-        }
-    }
-    notation += from.toString();
-    notation += (capturedPiece != nullptr) ? "x" : "-";
-    notation += to.toString();
-    return notation;
-}
-
-// Check if move is a capture
-bool Move::isCapture() const {
-    return capturedPiece != nullptr || isEnPassant;
-}
-
-// Check if move is valid
-bool Move::isValid() const {
-    return from.isValid() && to.isValid() && movedPiece != nullptr;
-}

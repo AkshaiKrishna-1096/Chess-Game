@@ -21,12 +21,7 @@ public:
     char getSymbol() const override;
     std::string getName() const override;
     
-    
-    int getValue() const override;
-    
-    
     bool canPromote() const;
-    bool isAtStartingPosition() const;
 };
 
 #endif 

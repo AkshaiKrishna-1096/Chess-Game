@@ -174,17 +174,6 @@ std::string Pawn::getName() const {
 }
 
 /**
- * @brief Returns the relative material value of the Pawn.
- * 
- * In standard chess evaluation, the Pawn is worth 1 point.
- * 
- * @return int The value of the Pawn (1).
- */
-int Pawn::getValue() const {
-    return 1;
-}
-
-/**
  * @brief Checks whether the Pawn has reached the promotion rank.
  * 
  * White pawns promote at the top row (row 0), and black pawns at the bottom row (row 7).
@@ -197,15 +186,3 @@ bool Pawn::canPromote() const {
     return position.getRow() == promotionRow;
 }
 
-/**
- * @brief Checks whether the Pawn is still at its starting position.
- * 
- * This is used to determine if the pawn can move two squares forward.
- * 
- * @return true If the pawn is on its original rank.
- * @return false Otherwise.
- */
-bool Pawn::isAtStartingPosition() const {
-    int startRow = (color == Color::WHITE) ? 6 : 1;
-    return position.getRow() == startRow;
-}

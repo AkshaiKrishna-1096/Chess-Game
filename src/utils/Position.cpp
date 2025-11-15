@@ -34,14 +34,6 @@ int Position::getCol() const {
 }
 
 // Setters
-void Position::setRow(int r) {
-    row = r;
-}
-
-void Position::setCol(int c) {
-    col = c;
-}
-
 void Position::setPosition(int r, int c) {
     row = r;
     col = c;
@@ -86,30 +78,6 @@ std::string Position::toString() const {
 }
 
 /**
- * @brief Convert rank and file into Col and Row
- * 
- * @param notation 
- * @return Position 
- */
-Position Position::fromString(const std::string& notation) {
-    if (notation.length() != 2) {
-        return Position(-1, -1);  // Invalid position
-    }
-    
-    char colChar = std::tolower(notation[0]);
-    char rowChar = notation[1];
-    
-    if (colChar < 'a' || colChar > 'h' || rowChar < '1' || rowChar > '8') {
-        return Position(-1, -1);  // Invalid position
-    }
-    
-    int col = colChar - 'a';
-    int row = 8 - (rowChar - '0');  // Convert: rank 1 = row 7, rank 8 = row 0
-    
-    return Position(row, col);
-}
-
-/**
  * @brief Check if the param Position is diagonal to this Position or not
  * 
  * @param other 
@@ -120,26 +88,4 @@ bool Position::isDiagonal(const Position& other) const {
     int dr = std::abs(row - other.row);
     int dc = std::abs(col - other.col);
     return dr == dc && dr != 0;
-}
-
-/**
- * @brief Check if the param Position is in the same Row
- * 
- * @param other 
- * @return true 
- * @return false 
- */
-bool Position::isSameRow(const Position& other) const {
-    return row == other.row && col != other.col;
-}
-
-/**
- * @brief Check if the param Position is in the same Column
- * 
- * @param other 
- * @return true 
- * @return false 
- */
-bool Position::isSameColumn(const Position& other) const {
-    return col == other.col && row != other.row;
 }

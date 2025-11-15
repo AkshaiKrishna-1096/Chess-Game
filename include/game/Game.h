@@ -23,7 +23,6 @@ private:
     
     void initializePieces();
     void switchPlayer();
-    bool isValidGameMove(const Position& from, const Position& to);
     bool wouldBeInCheck(const Position& from, const Position& to, Color playerColor);
     void updateGameState();
     bool hasLegalMoves(Color color);
@@ -47,35 +46,13 @@ public:
    
     void start();
     bool makeMove(const Position& from, const Position& to);
-    void undoMove(); 
-    void reset();
     
     
     GameState getState() const;
     Player* getCurrentPlayer() const;
     Player* getWinner() const;
-    Player* getWhitePlayer() const;
-    Player* getBlackPlayer() const;
     Board* getBoard() const;
-    int getMoveCount() const;
-    
-    
-    bool isCheck(Color color) const;
-    bool isCheckmate(Color color) const;
-    bool isStalemate(Color color) const;
-    bool isDraw() const;
-    
-    
-    std::vector<Move*> getMoveHistory() const;
-    Move* getLastMove() const;
-    
-    
     void displayBoard() const;
-    void displayGameInfo() const;
-    void displayMoveHistory() const;
-    
-    
-    std::string getGameStatus() const;
 };
 
 #endif 

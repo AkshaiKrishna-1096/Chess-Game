@@ -30,23 +30,8 @@ public:
     std::string getName() const;
     Color getColor() const;
     bool getIsInCheck() const;
-    int getScore() const;
-    int getCapturedPieceValue() const;
-    
-    
-    void setName(const std::string& playerName);
     void setIsInCheck(bool check);
-    void setScore(int newScore);
-    
-    
-    void addScore(int points);
     void addCapturedPieceValue(int value);
-    void resetScore();
-    
-    
-    std::string toString() const;
-    bool isWhite() const;
-    bool isBlack() const;
 };
 
 #endif 

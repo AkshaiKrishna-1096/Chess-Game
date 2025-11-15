@@ -16,8 +16,6 @@ public:
     std::vector<Position> getPossibleMoves(Board& board) override;
     char getSymbol() const override;
     std::string getName() const override;
-    int getValue() const override;
-    
     
     bool canCastle(bool kingSide, Board& board) const;
 };

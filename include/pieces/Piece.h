@@ -22,8 +22,6 @@ public:
     virtual char getSymbol() const = 0;
     virtual std::string getName() const = 0;   
 
-    virtual int getValue() const;
-
     Color getColor() const;
     Position getPosition() const;
     bool getHasMoved() const;
@@ -31,10 +29,7 @@ public:
     void setPosition(const Position& pos);
     void setHasMoved(bool moved);
     
-    bool isWhite() const;
-    bool isBlack() const;
     bool isSameColor(const Piece* other) const;
-    std::string toString() const;
 };
 
 #endif 

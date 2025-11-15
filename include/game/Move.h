@@ -39,27 +39,16 @@ public:
     // Destructor
     ~Move();
     
-    // Getters (Encapsulation)
+    // Getters (only what's actually used)
     Position getFrom() const;
     Position getTo() const;
     Piece* getMovedPiece() const;
-    Piece* getCapturedPiece() const;
-    bool getIsCastling() const;
-    bool getIsEnPassant() const;
-    bool getIsPromotion() const;
-    char getPromotionPiece() const;
     
     // Setters
     void setCapturedPiece(Piece* piece);
     void setIsCastling(bool castling);
     void setIsEnPassant(bool enPassant);
     void setIsPromotion(bool promotion, char piece = 'Q');
-    
-    // Utility
-    std::string toString() const;
-    std::string toAlgebraicNotation() const;
-    bool isCapture() const;
-    bool isValid() const;
 };
 
 #endif // MOVE_H

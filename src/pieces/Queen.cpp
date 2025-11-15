@@ -82,9 +82,3 @@ char Queen::getSymbol() const {
 std::string Queen::getName() const {
     return "Queen";
 }
-/**
- * @brief Queen is highly valuable. so it returns 9.
- */
-int Queen::getValue() const {
-    return 9;
-}

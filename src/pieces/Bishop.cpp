@@ -96,10 +96,3 @@ std::string Bishop::getName() const {
     return "Bishop";
 }
 
-/**
- * @brief Returns the piece value.
- * @return 3.
- */
-int Bishop::getValue() const {
-    return 3;
-}

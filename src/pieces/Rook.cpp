@@ -95,10 +95,3 @@ std::string Rook::getName() const {
     return "Rook";
 }
 
-/**
- * @brief Returns the piece value.
- * @return 5.
- */
-int Rook::getValue() const {
-    return 5;
-}

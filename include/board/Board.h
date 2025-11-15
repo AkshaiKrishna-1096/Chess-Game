@@ -24,7 +24,6 @@ private:
     Move* lastMove;                  // Track last move for en passant
     
     void createSquares();
-    void placePiece(Piece* piece, const Position& pos);
     
     bool isPathClearVertical(const Position& from, const Position& to) const;
     bool isPathClearHorizontal(const Position& from, const Position& to) const;
@@ -35,13 +34,10 @@ public:
     ~Board();
 
     void clear();
-    void reset();
     
     Square* getSquare(const Position& pos) const;
-    Square* getSquare(int row, int col) const;
     
     Piece* getPieceAt(const Position& pos) const;
-    Piece* getPieceAt(int row, int col) const;
     std::vector<Piece*> getPieces(Color color) const;
     std::vector<Piece*> getAllPieces() const;
     
@@ -64,11 +60,8 @@ public:
     Move* getLastMove() const;
     
     void display() const;
-    void displayWithCoordinates() const;
-    std::string toString() const;
 
     bool isValidPosition(const Position& pos) const;
-    bool isValidPosition(int row, int col) const;
 };
 
 #endif // BOARD_H
